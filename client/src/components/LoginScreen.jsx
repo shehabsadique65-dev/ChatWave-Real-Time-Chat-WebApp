@@ -41,7 +41,8 @@ function LoginScreen({ onJoin }) {
         return;
       }
 
-      onJoin(data.user);
+      // Pass BOTH the user object AND the one-time server token
+      onJoin(data.user, data.sessionToken);
     } catch (err) {
       setError("Network error. Is the server running?");
       setIsLoading(false);

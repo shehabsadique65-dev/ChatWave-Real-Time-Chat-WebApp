@@ -18,14 +18,17 @@ function App() {
     return null;
   });
 
-  function handleLogin(userData) {
+  function handleLogin(userData, sessionToken) {
     setUser(userData);
     sessionStorage.setItem("chat_user", JSON.stringify(userData));
+    // Store token separately — it's consumed once on socket join
+    if (sessionToken) sessionStorage.setItem("chat_session_token", sessionToken);
   }
 
   function handleLogout() {
     setUser(null);
     sessionStorage.removeItem("chat_user");
+    sessionStorage.removeItem("chat_session_token");
   }
 
   if (!user) {

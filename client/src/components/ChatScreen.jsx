@@ -34,7 +34,11 @@ function ChatScreen({ user, onLogout }) {
   useEffect(() => {
     if (isKickedRef.current) return;
     socket.connect();
-    socket.emit("user_join", user);
+
+    // ✅ SECURITY: Send the one-time server-issued token — server verifies role from this
+    const sessionToken = sessionStorage.getItem("chat_session_token");
+    sessionStorage.removeItem("chat_session_token"); // consume immediately, one-time use
+    socket.emit("user_join", { sessionToken });
     socket.on("connect", () => setCurrentUser((prev) => ({ ...prev, id: socket.id })));
     if (socket.connected) setCurrentUser((prev) => ({ ...prev, id: socket.id }));
     socket.on("message_history", (history) => setMessages(history));
